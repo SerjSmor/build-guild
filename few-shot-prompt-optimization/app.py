@@ -10,6 +10,170 @@ PROGRESS_PATH = ROOT / "progress.json"
 USER_ARTIFACTS_DIR = ROOT / "user_artifacts"
 
 
+def apply_theme():
+    st.markdown(
+        """
+        <style>
+        :root {
+            --bg: #10131a;
+            --panel: #171b24;
+            --panel-soft: #1d2230;
+            --border: #343b4f;
+            --border-gold: #8a6f35;
+            --text: #e8e1d2;
+            --muted: #a8a092;
+            --gold: #d4af5f;
+            --gold-soft: #f0d68a;
+            --green: #79b879;
+            --red: #c76b6b;
+            --blue: #7aa5c8;
+        }
+
+        .stApp {
+            background:
+                radial-gradient(circle at top left, rgba(212, 175, 95, 0.10), transparent 30rem),
+                linear-gradient(180deg, #11151f 0%, var(--bg) 45%, #0d1016 100%);
+            color: var(--text);
+        }
+
+        .block-container {
+            max-width: 1180px;
+            padding-top: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        #MainMenu,
+        header,
+        footer,
+        [data-testid="stToolbar"],
+        [data-testid="stDecoration"],
+        [data-testid="stStatusWidget"] {
+            visibility: hidden;
+            height: 0;
+        }
+
+        h1, h2, h3 {
+            color: var(--text);
+            letter-spacing: 0;
+        }
+
+        h1 {
+            border-bottom: 1px solid rgba(212, 175, 95, 0.45);
+            padding-bottom: 0.55rem;
+        }
+
+        h2, h3 {
+            color: var(--gold-soft);
+        }
+
+        p, li, .stMarkdown, .stCaptionContainer {
+            color: var(--text);
+        }
+
+        .stCaptionContainer {
+            color: var(--muted);
+        }
+
+        a {
+            color: var(--gold-soft) !important;
+            text-decoration-color: rgba(212, 175, 95, 0.45) !important;
+        }
+
+        .stProgress > div > div > div > div {
+            background: linear-gradient(90deg, #8a6f35, #d4af5f);
+        }
+
+        [data-testid="stTabs"] [role="tablist"] {
+            gap: 0.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        [data-testid="stTabs"] [role="tab"] {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-bottom: 0;
+            border-radius: 6px 6px 0 0;
+            color: var(--muted);
+            padding: 0.55rem 0.9rem;
+        }
+
+        [data-testid="stTabs"] [aria-selected="true"] {
+            background: linear-gradient(180deg, #24202b, var(--panel-soft));
+            border-color: var(--border-gold);
+            color: var(--gold-soft);
+        }
+
+        [data-testid="stExpander"] {
+            background: rgba(23, 27, 36, 0.78);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 0.65rem;
+        }
+
+        [data-testid="stExpander"] summary {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        div[data-testid="stAlert"] {
+            background: rgba(29, 34, 48, 0.92);
+            border: 1px solid var(--border-gold);
+            border-radius: 8px;
+            color: var(--text);
+        }
+
+        div[data-testid="stCodeBlock"] {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        code {
+            color: var(--gold-soft);
+            background: rgba(212, 175, 95, 0.10);
+            border-radius: 4px;
+            padding: 0.08rem 0.22rem;
+        }
+
+        .stTextInput input {
+            background: #11151f;
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 6px;
+        }
+
+        .stTextInput input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 1px rgba(212, 175, 95, 0.25);
+        }
+
+        .stButton button {
+            background: #171b24;
+            border: 1px solid var(--border-gold);
+            border-radius: 6px;
+            color: var(--gold-soft);
+            font-weight: 600;
+        }
+
+        .stButton button:hover {
+            background: #24202b;
+            border-color: var(--gold-soft);
+            color: #fff6d6;
+        }
+
+        hr {
+            border-color: rgba(212, 175, 95, 0.25);
+        }
+
+        img {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def load_json(path):
     with path.open("r", encoding="utf-8") as handle:
         return json.load(handle)
@@ -273,6 +437,7 @@ challenge = load_json(CHALLENGE_PATH)
 progress = load_json(PROGRESS_PATH)
 
 st.set_page_config(page_title=challenge["title"], layout="wide")
+apply_theme()
 st.title(challenge["title"])
 st.caption(challenge["goal"])
 
