@@ -180,6 +180,56 @@
         "checked_at": "2026-07-07T20:38:13.235154+00:00"
       },
       "ready_at": "2026-07-07T20:13:03.260375+00:00"
+    },
+    "fewshot_prompt_section": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "naive_fewshot_optimizer": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "generate_naive_prompt": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "evaluate_naive_prompt": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "compare_to_baseline": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "multi_seed_optimizer_function": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "multi_seed_looping": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "multi_seed_dev_evaluation": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "reuse_naive_optimizer": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "document_optimizer_reuse": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
     }
   }
 }

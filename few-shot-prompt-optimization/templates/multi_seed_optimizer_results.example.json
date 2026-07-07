@@ -1,0 +1,18 @@
+{
+  "num_loops": 5,
+  "num_examples": 4,
+  "score_name": "accuracy",
+  "selection_mode": "max",
+  "best_score": 0.0,
+  "best_seed": 0,
+  "best_prompt_artifact": "user_artifacts/prompts/best_multi_seed_prompt.txt",
+  "trials": [
+    {
+      "seed": 0,
+      "score": 0.0,
+      "selected_example_ids": []
+    }
+  ],
+  "notes": ""
+}
+

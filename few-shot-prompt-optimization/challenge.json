@@ -105,6 +105,118 @@
           "expected_artifacts": ["user_artifacts/baseline_results.json"]
         }
       ]
+    },
+    {
+      "id": "naive_optimizer",
+      "title": "Create Naive Few-Shot Prompt Optimizer",
+      "short_description": "Create a first simple optimizer that builds prompts from random few-shot examples.",
+      "long_description": "Create a first naive few-shot prompt optimizer. Start from the baseline prompt and make it possible to insert labeled examples into a dedicated section. Then write a small function that samples training examples and returns a new prompt with those examples included.",
+      "tasks": [
+        {
+          "id": "fewshot_prompt_section",
+          "title": "Add a dedicated section in the prompt for few-shot examples",
+          "small_hint": "Use a unique marker or separator so code can reliably insert examples.",
+          "full_explanation": "Your prompt template should have a clear place where examples can be inserted, such as {{FEW_SHOT_EXAMPLES}}. Each example should also be easy to separate from the next one, for example with a repeated separator like ---EXAMPLE---. The exact format is up to you.",
+          "judge_level": "medium",
+          "expected_artifacts": ["user_artifacts/prompts/fewshot_prompt_template.txt"]
+        },
+        {
+          "id": "naive_fewshot_optimizer",
+          "title": "Create a function that builds a prompt from random training examples",
+          "small_hint": "Sample examples from the training set and format each example consistently.",
+          "full_explanation": "Create a function that receives train examples and the desired number of examples, randomly selects that many examples, formats them as few-shot examples, and returns a prompt string with the examples inserted. It may also accept a prompt template and optional random seed for reproducibility.",
+          "judge_level": "medium",
+          "expected_artifacts": ["user_artifacts/src/naive_optimizer.py"]
+        }
+      ]
+    },
+    {
+      "id": "naive_prompt_evaluation",
+      "title": "Evaluate Naive Few-Shot Prompt",
+      "short_description": "Run the naive few-shot prompt on a sample and compare its score to the baseline.",
+      "long_description": "Evaluate the prompt created by the naive few-shot optimizer. Generating a prompt is only useful if you measure how it performs, so run it on a small evaluation sample, save the results, and compare the score to the baseline.",
+      "tasks": [
+        {
+          "id": "generate_naive_prompt",
+          "title": "Generate a prompt using the naive few-shot optimizer",
+          "small_hint": "Use your optimizer from the previous milestone to create an actual prompt instance.",
+          "full_explanation": "This artifact should be the concrete prompt after few-shot examples were inserted into the template. It should not be only the template with an empty placeholder.",
+          "judge_level": "medium",
+          "expected_artifacts": ["user_artifacts/prompts/naive_fewshot_prompt.txt"]
+        },
+        {
+          "id": "evaluate_naive_prompt",
+          "title": "Evaluate the generated few-shot prompt on a small sample",
+          "small_hint": "Reuse the same metric function and evaluation shape from the baseline milestone.",
+          "full_explanation": "Run predictions with the generated few-shot prompt and save the overall score. Each prediction row should include the text, the groundtruth intent, the predicted intent, and whether the prediction was correct.",
+          "judge_level": "hard",
+          "expected_artifacts": ["user_artifacts/naive_fewshot_results.json"]
+        },
+        {
+          "id": "compare_to_baseline",
+          "title": "Compare the naive few-shot score to the baseline score",
+          "small_hint": "A better prompt should be judged by data, not by how it looks.",
+          "full_explanation": "Load or reference the baseline result and the naive few-shot result. Save whether the naive prompt improved, regressed, or stayed similar, along with the score difference.",
+          "judge_level": "medium",
+          "expected_artifacts": ["user_artifacts/naive_vs_baseline.json"]
+        }
+      ]
+    },
+    {
+      "id": "multi_seed_optimizer",
+      "title": "Create Multi-Seed Few-Shot Optimizer",
+      "short_description": "Try multiple random few-shot sets and keep the best-scoring prompt.",
+      "long_description": "Create a more sophisticated few-shot optimizer. Instead of trusting one random set of examples, run several loops with different random seeds, build a new prompt each time, evaluate it on a dev set, and keep the best result. If your score is an error or loss, that means keeping the lowest score; if your score is accuracy, that means keeping the highest score.",
+      "tasks": [
+        {
+          "id": "multi_seed_optimizer_function",
+          "title": "Create an optimizer function that accepts train examples, dev examples, example count, and loop count",
+          "small_hint": "This should feel similar to the naive optimizer, but it needs enough inputs to run a search.",
+          "full_explanation": "Create a function that accepts train examples, dev examples, the number of examples to put in each prompt, and the number of loops or trials to run. It can reuse your naive optimizer internally, but it should coordinate a full search over several random candidate prompts.",
+          "judge_level": "medium",
+          "expected_artifacts": ["user_artifacts/src/multi_seed_optimizer.py"]
+        },
+        {
+          "id": "multi_seed_looping",
+          "title": "Loop over several candidate prompts with different random seeds",
+          "small_hint": "Each loop should try a different randomized few-shot set.",
+          "full_explanation": "Inside the optimizer, each iteration should use a different seed or random state so it selects a different set of training examples. Store enough information to know which seed/examples produced the selected prompt.",
+          "judge_level": "medium",
+          "expected_artifacts": ["user_artifacts/src/multi_seed_optimizer.py"]
+        },
+        {
+          "id": "multi_seed_dev_evaluation",
+          "title": "Evaluate each candidate prompt on a dev set and keep the best result",
+          "small_hint": "The optimizer should make a data-based choice, not just return the last prompt.",
+          "full_explanation": "For every candidate prompt, run evaluation on dev examples, record the score, and keep the best candidate. If the score is an error/loss, keep the lowest score. If the score is accuracy, keep the highest score. Save the selected prompt and trial summary.",
+          "judge_level": "hard",
+          "expected_artifacts": ["user_artifacts/multi_seed_optimizer_results.json"]
+        }
+      ]
+    },
+    {
+      "id": "optimizer_reuse_refactor",
+      "title": "Improve Optimizer Code Reuse",
+      "short_description": "Refactor the sophisticated optimizer so it reuses the naive optimizer.",
+      "long_description": "Improve code reuse in the few-shot optimizer implementation. The sophisticated multi-seed optimizer should not duplicate all of the naive prompt-building logic. Refactor it so the naive optimizer remains the small building block, and the multi-seed optimizer coordinates the search around it.",
+      "tasks": [
+        {
+          "id": "reuse_naive_optimizer",
+          "title": "Make the sophisticated optimizer use the naive optimizer internally",
+          "small_hint": "The multi-seed optimizer should coordinate loops, seeds, and evaluation; the naive optimizer can still build each candidate prompt.",
+          "full_explanation": "Refactor the implementation so user_artifacts/src/multi_seed_optimizer.py imports or calls the function from user_artifacts/src/naive_optimizer.py instead of repeating the same prompt-building code. The goal is clearer separation of responsibilities.",
+          "judge_level": "hard",
+          "expected_artifacts": ["user_artifacts/src/multi_seed_optimizer.py", "user_artifacts/src/naive_optimizer.py"]
+        },
+        {
+          "id": "document_optimizer_reuse",
+          "title": "Summarize the reuse improvement",
+          "small_hint": "Write down what changed and why the split is cleaner.",
+          "full_explanation": "Create a short note explaining which function now owns prompt construction and which function owns multi-seed search/evaluation. This gives the judge a simple artifact to verify the intended design.",
+          "judge_level": "easy",
+          "expected_artifacts": ["user_artifacts/optimizer_reuse_notes.md"]
+        }
+      ]
     }
   ]
 }

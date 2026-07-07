@@ -1,0 +1,17 @@
+{
+  "sample_size": 20,
+  "correct": 0,
+  "accuracy": 0.0,
+  "model": "replace-with-model-name",
+  "prompt_artifact": "user_artifacts/prompts/naive_fewshot_prompt.txt",
+  "notes": "",
+  "predictions": [
+    {
+      "text": "show me flights from boston to denver",
+      "gold_intent": "flight",
+      "predicted_intent": "flight",
+      "correct": true
+    }
+  ]
+}
+

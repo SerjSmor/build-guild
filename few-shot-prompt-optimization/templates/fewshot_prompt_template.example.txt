@@ -1,0 +1,14 @@
+Classify the following ATIS user message into exactly one intent label.
+
+Use the labeled examples below as guidance.
+
+{{FEW_SHOT_EXAMPLES}}
+
+User message:
+{text}
+
+Allowed labels:
+{labels}
+
+Return only the intent label.
+

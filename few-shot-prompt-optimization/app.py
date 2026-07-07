@@ -106,6 +106,12 @@ def milestone_prompt(challenge, milestone):
 
     for index, task in enumerate(milestone["tasks"], start=1):
         lines.append(f"{index}. {task['title']} (task id: {task['id']})")
+        if task.get("small_hint"):
+            lines.append(f"   - Hint: {task['small_hint']}")
+        if task.get("full_explanation"):
+            lines.append(f"   - Full explanation: {task['full_explanation']}")
+        if task.get("bonus"):
+            lines.append(f"   - Bonus: {task['bonus']}")
         for artifact in task.get("expected_artifacts", []):
             lines.append(f"   - Expected artifact: {artifact}")
 

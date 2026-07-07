@@ -54,6 +54,52 @@ Then mark the milestone ready:
 python scripts/mark_ready.py --milestone baseline --notes "Completed baseline classifier, metric, and evaluation results"
 ```
 
+For the naive optimizer milestone, create:
+
+- `user_artifacts/prompts/fewshot_prompt_template.txt`
+- `user_artifacts/src/naive_optimizer.py`
+
+Then mark the milestone ready:
+
+```bash
+python scripts/mark_ready.py --milestone naive_optimizer --notes "Completed naive few-shot prompt optimizer"
+```
+
+For the naive prompt evaluation milestone, create:
+
+- `user_artifacts/prompts/naive_fewshot_prompt.txt`
+- `user_artifacts/naive_fewshot_results.json`
+- `user_artifacts/naive_vs_baseline.json`
+
+Then mark the milestone ready:
+
+```bash
+python scripts/mark_ready.py --milestone naive_prompt_evaluation --notes "Completed naive few-shot prompt evaluation"
+```
+
+For the multi-seed optimizer milestone, create:
+
+- `user_artifacts/src/multi_seed_optimizer.py`
+- `user_artifacts/multi_seed_optimizer_results.json`
+
+Then mark the milestone ready:
+
+```bash
+python scripts/mark_ready.py --milestone multi_seed_optimizer --notes "Completed multi-seed few-shot optimizer"
+```
+
+For the optimizer reuse milestone, update/create:
+
+- `user_artifacts/src/multi_seed_optimizer.py`
+- `user_artifacts/src/naive_optimizer.py`
+- `user_artifacts/optimizer_reuse_notes.md`
+
+Then mark the milestone ready:
+
+```bash
+python scripts/mark_ready.py --milestone optimizer_reuse_refactor --notes "Refactored multi-seed optimizer to reuse naive optimizer"
+```
+
 The builder should not mark tasks complete.
 
 ## Judge Flow

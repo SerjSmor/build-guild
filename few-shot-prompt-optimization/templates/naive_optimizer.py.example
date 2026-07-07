@@ -1,0 +1,19 @@
+"""Example shape for the naive few-shot optimizer artifact.
+
+The builder should create user_artifacts/src/naive_optimizer.py.
+"""
+
+import random
+
+
+def build_fewshot_prompt(train_examples, num_examples, template, seed=None):
+    """Return a prompt with randomly selected few-shot examples inserted."""
+    rng = random.Random(seed)
+    selected = rng.sample(list(train_examples), k=num_examples)
+    formatted_examples = []
+    for example in selected:
+        formatted_examples.append(
+            f"---EXAMPLE---\nMessage: {example['text']}\nIntent: {example['intent']}"
+        )
+    return template.replace("{{FEW_SHOT_EXAMPLES}}", "\n\n".join(formatted_examples))
+

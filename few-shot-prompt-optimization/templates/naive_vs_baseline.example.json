@@ -1,0 +1,10 @@
+{
+  "baseline_accuracy": 0.0,
+  "naive_fewshot_accuracy": 0.0,
+  "delta": 0.0,
+  "outcome": "same",
+  "baseline_artifact": "user_artifacts/baseline_results.json",
+  "naive_fewshot_artifact": "user_artifacts/naive_fewshot_results.json",
+  "notes": ""
+}
+

@@ -1,0 +1,18 @@
+"""Example shape for the multi-seed few-shot optimizer artifact.
+
+The builder should create user_artifacts/src/multi_seed_optimizer.py.
+"""
+
+
+def optimize_fewshot_prompt(
+    train_examples,
+    dev_examples,
+    num_examples,
+    num_loops,
+    template,
+    evaluate_fn,
+    base_seed=0,
+):
+    """Try multiple randomized few-shot prompts and return the best result."""
+    raise NotImplementedError
+
