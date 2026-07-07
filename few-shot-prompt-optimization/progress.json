@@ -1,0 +1,120 @@
+{
+  "challenge_id": "few-shot-prompt-optimization",
+  "tasks": {
+    "row_count": {
+      "status": "complete",
+      "builder_notes": "Completed user_artifacts/eda_summary.json with ATIS row counts, splits, intent classes, message description, and average message length.",
+      "judge": {
+        "verdict": "pass",
+        "confidence": "medium",
+        "evidence": [
+          "Task: Find how many rows are in the dataset",
+          "Milestone: Quick EDA",
+          "Judge level: easy",
+          "Expected artifact exists: user_artifacts/eda_summary.json",
+          "Found artifact: user_artifacts/eda_summary.json",
+          "row_count=5871"
+        ],
+        "missing_or_risky": [],
+        "commands_run": [],
+        "checked_at": "2026-07-07T05:33:23.457413+00:00"
+      },
+      "ready_at": "2026-07-07T05:32:45.610635+00:00"
+    },
+    "splits": {
+      "status": "complete",
+      "builder_notes": "Completed user_artifacts/eda_summary.json with ATIS row counts, splits, intent classes, message description, and average message length.",
+      "judge": {
+        "verdict": "pass",
+        "confidence": "medium",
+        "evidence": [
+          "Task: Identify whether train and test splits exist",
+          "Milestone: Quick EDA",
+          "Judge level: easy",
+          "Expected artifact exists: user_artifacts/eda_summary.json",
+          "Found artifact: user_artifacts/eda_summary.json",
+          "splits=[{'name': 'train', 'row_count': 4978}, {'name': 'test', 'row_count': 893}]"
+        ],
+        "missing_or_risky": [],
+        "commands_run": [],
+        "checked_at": "2026-07-07T05:33:23.457466+00:00"
+      },
+      "ready_at": "2026-07-07T05:32:45.610648+00:00"
+    },
+    "classes": {
+      "status": "complete",
+      "builder_notes": "Completed user_artifacts/eda_summary.json with ATIS row counts, splits, intent classes, message description, and average message length.",
+      "judge": {
+        "verdict": "pass",
+        "confidence": "medium",
+        "evidence": [
+          "Task: Identify what classes or labels exist",
+          "Milestone: Quick EDA",
+          "Judge level: easy",
+          "Expected artifact exists: user_artifacts/eda_summary.json",
+          "Found artifact: user_artifacts/eda_summary.json",
+          "classes count=26"
+        ],
+        "missing_or_risky": [],
+        "commands_run": [],
+        "checked_at": "2026-07-07T05:33:23.457500+00:00"
+      },
+      "ready_at": "2026-07-07T05:32:45.610649+00:00"
+    },
+    "messages": {
+      "status": "complete",
+      "builder_notes": "Completed user_artifacts/eda_summary.json with ATIS row counts, splits, intent classes, message description, and average message length.",
+      "judge": {
+        "verdict": "pass",
+        "confidence": "medium",
+        "evidence": [
+          "Task: Describe what kind of messages the dataset contains",
+          "Milestone: Quick EDA",
+          "Judge level: easy",
+          "Expected artifact exists: user_artifacts/eda_summary.json",
+          "Found artifact: user_artifacts/eda_summary.json",
+          "message_description present=True"
+        ],
+        "missing_or_risky": [],
+        "commands_run": [],
+        "checked_at": "2026-07-07T05:33:23.457532+00:00"
+      },
+      "ready_at": "2026-07-07T05:32:45.610650+00:00"
+    },
+    "average_length": {
+      "status": "complete",
+      "builder_notes": "Completed user_artifacts/eda_summary.json with ATIS row counts, splits, intent classes, message description, and average message length.",
+      "judge": {
+        "verdict": "pass",
+        "confidence": "medium",
+        "evidence": [
+          "Task: Calculate the average message length",
+          "Milestone: Quick EDA",
+          "Judge level: easy",
+          "Expected artifact exists: user_artifacts/eda_summary.json",
+          "Found artifact: user_artifacts/eda_summary.json",
+          "average_message_length=62.90103900528019"
+        ],
+        "missing_or_risky": [],
+        "commands_run": [],
+        "checked_at": "2026-07-07T05:33:23.457566+00:00"
+      },
+      "ready_at": "2026-07-07T05:32:45.610651+00:00"
+    },
+    "baseline_classifier": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "metric_function": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "baseline_score": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    }
+  }
+}

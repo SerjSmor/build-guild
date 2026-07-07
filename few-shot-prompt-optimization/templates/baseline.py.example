@@ -1,0 +1,10 @@
+"""Example shape for the baseline classifier artifact.
+
+The builder should create user_artifacts/src/baseline.py.
+"""
+
+
+def classify_intent(text, labels, client=None, model=None):
+    """Return one intent label for the ATIS user utterance."""
+    raise NotImplementedError
+

@@ -1,0 +1,90 @@
+{
+  "id": "few-shot-prompt-optimization",
+  "title": "Few-Shot Prompt Optimization",
+  "goal": "Build a simple few-shot prompt optimizer for ATIS intent classification, simpler than DSPy.",
+  "dataset": {
+    "name": "ATIS",
+    "huggingface_id": "tuetschek/atis",
+    "url": "https://huggingface.co/datasets/tuetschek/atis",
+    "loading_example": "from datasets import load_dataset\n\ndataset = load_dataset(\"tuetschek/atis\")\nprint(dataset)\nprint(dataset[\"train\"][0])",
+    "notes": [
+      "Use the Hugging Face datasets library.",
+      "The dataset has train and test splits.",
+      "Useful fields for this challenge are text for the utterance and intent for the class label.",
+      "The slots field is present but is not needed for intent-classification prompt optimization."
+    ]
+  },
+  "judging": {
+    "mode": "dynamic",
+    "default_level": "medium",
+    "levels": {
+      "easy": "Plausibility and artifact check.",
+      "medium": "Implementation review plus available commands.",
+      "hard": "Strict behavioral review with deeper checks for correctness and superficial implementations."
+    }
+  },
+  "milestones": [
+    {
+      "id": "eda",
+      "title": "Quick EDA",
+      "description": "Explore the ATIS dataset and summarize the basic dataset shape.",
+      "tasks": [
+        {
+          "id": "row_count",
+          "title": "Find how many rows are in the dataset",
+          "judge_level": "easy",
+          "expected_artifacts": ["user_artifacts/eda_summary.json"]
+        },
+        {
+          "id": "splits",
+          "title": "Identify whether train and test splits exist",
+          "judge_level": "easy",
+          "expected_artifacts": ["user_artifacts/eda_summary.json"]
+        },
+        {
+          "id": "classes",
+          "title": "Identify what classes or labels exist",
+          "judge_level": "easy",
+          "expected_artifacts": ["user_artifacts/eda_summary.json"]
+        },
+        {
+          "id": "messages",
+          "title": "Describe what kind of messages the dataset contains",
+          "judge_level": "easy",
+          "expected_artifacts": ["user_artifacts/eda_summary.json"]
+        },
+        {
+          "id": "average_length",
+          "title": "Calculate the average message length",
+          "judge_level": "easy",
+          "expected_artifacts": ["user_artifacts/eda_summary.json"]
+        }
+      ]
+    },
+    {
+      "id": "baseline",
+      "title": "Calculate Baseline",
+      "description": "Create a simple LLM-based intent classifier, add a 0/1 correctness metric, and evaluate it on a small ATIS sample.",
+      "tasks": [
+        {
+          "id": "baseline_classifier",
+          "title": "Create a baseline classifier based on OpenAI or Claude",
+          "judge_level": "medium",
+          "expected_artifacts": ["user_artifacts/src/baseline.py"]
+        },
+        {
+          "id": "metric_function",
+          "title": "Add a metric function that returns 0 or 1 if the prediction is correct",
+          "judge_level": "medium",
+          "expected_artifacts": ["user_artifacts/src/metrics.py"]
+        },
+        {
+          "id": "baseline_score",
+          "title": "Run baseline evaluation on a small sample and save the score",
+          "judge_level": "hard",
+          "expected_artifacts": ["user_artifacts/baseline_results.json"]
+        }
+      ]
+    }
+  ]
+}

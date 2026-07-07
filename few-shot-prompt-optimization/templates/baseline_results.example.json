@@ -1,0 +1,16 @@
+{
+  "sample_size": 20,
+  "correct": 0,
+  "accuracy": 0.0,
+  "model": "replace-with-model-name",
+  "notes": "",
+  "predictions": [
+    {
+      "text": "show me flights from boston to denver",
+      "gold_intent": "flight",
+      "predicted_intent": "flight",
+      "correct": true
+    }
+  ]
+}
+

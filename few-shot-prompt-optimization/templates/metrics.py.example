@@ -1,0 +1,10 @@
+"""Example shape for the metric artifact.
+
+The builder should create user_artifacts/src/metrics.py.
+"""
+
+
+def exact_match(predicted, expected):
+    """Return 1 when the predicted intent equals the expected intent, else 0."""
+    return int(predicted == expected)
+

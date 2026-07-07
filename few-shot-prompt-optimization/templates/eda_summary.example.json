@@ -1,0 +1,11 @@
+{
+  "dataset": "ATIS",
+  "source": "https://huggingface.co/datasets/tuetschek/atis",
+  "row_count": null,
+  "splits": [],
+  "classes": [],
+  "message_description": "",
+  "average_message_length": null,
+  "notes": ""
+}
+
