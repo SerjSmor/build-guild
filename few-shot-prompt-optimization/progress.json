@@ -101,20 +101,85 @@
       },
       "ready_at": "2026-07-07T05:32:45.610651+00:00"
     },
-    "baseline_classifier": {
-      "status": "pending",
-      "builder_notes": "",
-      "judge": null
+    "baseline_prompt": {
+      "status": "complete",
+      "builder_notes": "Completed baseline prompt, single-message classifier, exact-match metric, and 50-example ATIS baseline results.",
+      "judge": {
+        "verdict": "pass",
+        "confidence": "medium",
+        "evidence": [
+          "Task: Write a simple prompt that classifies a single ATIS message",
+          "Milestone: Calculate Baseline",
+          "Judge level: medium",
+          "Expected artifact exists: user_artifacts/prompts/baseline_prompt.txt",
+          "prompt length=322",
+          "mentions message=True",
+          "mentions label/intent=True"
+        ],
+        "missing_or_risky": [],
+        "commands_run": [],
+        "checked_at": "2026-07-07T20:38:13.233556+00:00"
+      },
+      "ready_at": "2026-07-07T20:13:03.260356+00:00"
+    },
+    "single_message_classifier": {
+      "status": "complete",
+      "builder_notes": "Completed baseline prompt, single-message classifier, exact-match metric, and 50-example ATIS baseline results.",
+      "judge": {
+        "verdict": "pass",
+        "confidence": "medium",
+        "evidence": [
+          "Task: Create a function that classifies a single ATIS message through OpenAI or Claude",
+          "Milestone: Calculate Baseline",
+          "Judge level: medium",
+          "Expected artifact exists: user_artifacts/src/baseline.py",
+          "Python artifact compiles."
+        ],
+        "missing_or_risky": [],
+        "commands_run": [],
+        "checked_at": "2026-07-07T20:38:13.234808+00:00"
+      },
+      "ready_at": "2026-07-07T20:13:03.260373+00:00"
     },
     "metric_function": {
-      "status": "pending",
-      "builder_notes": "",
-      "judge": null
+      "status": "complete",
+      "builder_notes": "Completed baseline prompt, single-message classifier, exact-match metric, and 50-example ATIS baseline results.",
+      "judge": {
+        "verdict": "pass",
+        "confidence": "medium",
+        "evidence": [
+          "Task: Create a metric function",
+          "Milestone: Calculate Baseline",
+          "Judge level: medium",
+          "Expected artifact exists: user_artifacts/src/metrics.py",
+          "Python artifact compiles."
+        ],
+        "missing_or_risky": [],
+        "commands_run": [],
+        "checked_at": "2026-07-07T20:38:13.235076+00:00"
+      },
+      "ready_at": "2026-07-07T20:13:03.260374+00:00"
     },
     "baseline_score": {
-      "status": "pending",
-      "builder_notes": "",
-      "judge": null
+      "status": "complete",
+      "builder_notes": "Completed baseline prompt, single-message classifier, exact-match metric, and 50-example ATIS baseline results.",
+      "judge": {
+        "verdict": "pass",
+        "confidence": "medium",
+        "evidence": [
+          "Task: Calculate baseline by running predictions and computing an overall score",
+          "Milestone: Calculate Baseline",
+          "Judge level: hard",
+          "Expected artifact exists: user_artifacts/baseline_results.json",
+          "sample_size=50",
+          "accuracy=0.8",
+          "predictions count=50"
+        ],
+        "missing_or_risky": [],
+        "commands_run": [],
+        "checked_at": "2026-07-07T20:38:13.235154+00:00"
+      },
+      "ready_at": "2026-07-07T20:13:03.260375+00:00"
     }
   }
 }

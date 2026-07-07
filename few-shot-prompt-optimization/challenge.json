@@ -2,6 +2,15 @@
   "id": "few-shot-prompt-optimization",
   "title": "Few-Shot Prompt Optimization",
   "goal": "Build a simple few-shot prompt optimizer for ATIS intent classification, simpler than DSPy.",
+  "introduction": {
+    "title": "Build a Data-Driven Prompt Optimizer",
+    "body": [
+      "A lot of AI engineering work is focused on prompt-shaped tasks: classification, entity extraction, summarization, routing, and similar workflows.",
+      "Manual prompt engineering can be useful, but relying on vibes alone does not give you a data-based conclusion about whether a prompt is actually better.",
+      "In this quest, you will build a small automatic prompt optimizer by trying different sets of few-shot examples and evaluating accuracy to determine which subset works best."
+    ],
+    "illustration": "assets/full-flow-illustration.png"
+  },
   "dataset": {
     "name": "ATIS",
     "huggingface_id": "tuetschek/atis",
@@ -27,7 +36,8 @@
     {
       "id": "eda",
       "title": "Quick EDA",
-      "description": "Explore the ATIS dataset and summarize the basic dataset shape.",
+      "short_description": "Explore the ATIS dataset and summarize its basic shape.",
+      "long_description": "Each data quest starts with an exploratory data analysis. Explore the [ATIS](https://huggingface.co/datasets/tuetschek/atis?library=true) dataset and summarize the basic dataset shape. The goal is to understand what data is available before building prompt-based classifiers: row counts, train/test splits, labels, example utterances, and average message length.",
       "tasks": [
         {
           "id": "row_count",
@@ -64,23 +74,33 @@
     {
       "id": "baseline",
       "title": "Calculate Baseline",
-      "description": "Create a simple LLM-based intent classifier, add a 0/1 correctness metric, and evaluate it on a small ATIS sample.",
+      "short_description": "Create and score a simple LLM intent-classification baseline.",
+      "long_description": "Calculate a baseline on a small ATIS sample. Create a simple prompt and classifier, define a metric function, then run predictions and calculate an overall score. This milestone establishes the score that later prompt-optimization work should try to improve.",
       "tasks": [
         {
-          "id": "baseline_classifier",
-          "title": "Create a baseline classifier based on OpenAI or Claude",
+          "id": "baseline_prompt",
+          "title": "Write a simple prompt that classifies a single ATIS message",
+          "judge_level": "medium",
+          "expected_artifacts": ["user_artifacts/prompts/baseline_prompt.txt"]
+        },
+        {
+          "id": "single_message_classifier",
+          "title": "Create a function that classifies a single ATIS message through OpenAI or Claude",
           "judge_level": "medium",
           "expected_artifacts": ["user_artifacts/src/baseline.py"]
         },
         {
           "id": "metric_function",
-          "title": "Add a metric function that returns 0 or 1 if the prediction is correct",
+          "title": "Create a metric function",
+          "small_hint": "How can we utilize the groundtruth from the ATIS dataset?",
+          "full_explanation": "The function receives a single prediction (y') and the groundtruth (y) of the same example (x), and should return 1 if they are the same. You can also lower() for normalization.",
           "judge_level": "medium",
           "expected_artifacts": ["user_artifacts/src/metrics.py"]
         },
         {
           "id": "baseline_score",
-          "title": "Run baseline evaluation on a small sample and save the score",
+          "title": "Calculate baseline by running predictions and computing an overall score",
+          "bonus": "Use multi-threading to speed up prediction calls.",
           "judge_level": "hard",
           "expected_artifacts": ["user_artifacts/baseline_results.json"]
         }

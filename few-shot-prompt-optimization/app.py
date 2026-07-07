@@ -1,5 +1,4 @@
 import json
-import urllib.parse
 from pathlib import Path
 
 import streamlit as st
@@ -41,6 +40,39 @@ def milestone_status(milestone, progress):
     return "pending"
 
 
+def milestone_task_counts(milestone, progress):
+    total = len(milestone["tasks"])
+    complete = sum(
+        1
+        for task in milestone["tasks"]
+        if progress["tasks"].get(task["id"], {}).get("status") == "complete"
+    )
+    return complete, total
+
+
+def render_introduction(challenge, progress):
+    intro = challenge.get("introduction", {})
+    st.header(intro.get("title", "Project Introduction"))
+
+    for paragraph in intro.get("body", []):
+        st.markdown(f"- {paragraph}")
+
+    illustration = intro.get("illustration")
+    if illustration:
+        illustration_path = ROOT / illustration
+        if illustration_path.exists():
+            st.image(str(illustration_path), use_container_width=True)
+        else:
+            st.info(f"Add an illustration at `{illustration}` to show it here.")
+
+    st.subheader("Milestones")
+    for index, milestone in enumerate(challenge["milestones"], start=1):
+        state = milestone_status(milestone, progress)
+        complete, total = milestone_task_counts(milestone, progress)
+        st.write(f"{index}. {status_icon(state)} **{milestone['title']}** - {complete}/{total} tasks complete")
+        st.caption(milestone.get("short_description", milestone.get("description", "")))
+
+
 def milestone_prompt(challenge, milestone):
     lines = [
         "Builder role: complete this BuildGuild milestone.",
@@ -67,7 +99,7 @@ def milestone_prompt(challenge, milestone):
     lines.extend([
         "",
         f"Milestone: {milestone['title']}",
-        milestone["description"],
+        milestone.get("long_description", milestone.get("description", "")),
         "",
         "Tasks:"
     ])
@@ -88,39 +120,32 @@ def milestone_prompt(challenge, milestone):
     return "\n".join(lines)
 
 
-def copy_button(text, key):
-    payload = json.dumps(text)
-    html = f"""
-        <button id="copy-{key}" style="
-            border: 1px solid #d0d7de;
-            border-radius: 6px;
-            background: #ffffff;
-            color: #24292f;
-            cursor: pointer;
-            font: 14px sans-serif;
-            padding: 0.45rem 0.75rem;
-        ">Copy milestone prompt</button>
-        <span id="copy-status-{key}" style="
-            color: #57606a;
-            font: 13px sans-serif;
-            margin-left: 0.5rem;
-        "></span>
-        <script>
-        const button = document.getElementById("copy-{key}");
-        const status = document.getElementById("copy-status-{key}");
-        button.addEventListener("click", async () => {{
-            try {{
-                await navigator.clipboard.writeText({payload});
-                status.textContent = "Copied";
-                setTimeout(() => status.textContent = "", 1800);
-            }} catch (error) {{
-                status.textContent = "Copy failed";
-            }}
-        }});
-        </script>
-    """
-    src = "data:text/html;charset=utf-8," + urllib.parse.quote(html)
-    st.iframe(src, height=42)
+def milestone_hint(milestone):
+    task_count = len(milestone["tasks"])
+    artifact_count = len(milestone_artifacts(milestone))
+    return (
+        f"Complete the {task_count} tasks in this milestone and save the expected "
+        f"{artifact_count} artifact{'s' if artifact_count != 1 else ''} under `user_artifacts/`."
+    )
+
+
+def render_prompt_reveal(challenge, milestone):
+    milestone_id = milestone["id"]
+    input_key = f"prompt-reveal-input-{milestone_id}"
+    visible_key = f"prompt-reveal-visible-{milestone_id}"
+
+    st.info(milestone_hint(milestone))
+    reveal = st.text_input(
+        f"Type `show me` to reveal the full coding-agent prompt for {milestone['title']}.",
+        key=input_key
+    )
+
+    if reveal.strip().lower() == "show me":
+        st.session_state[visible_key] = True
+
+    if st.session_state.get(visible_key, False):
+        prompt = milestone_prompt(challenge, milestone)
+        st.code(prompt, language="text")
 
 
 def reset_milestone(milestone, progress):
@@ -186,6 +211,16 @@ def render_task(task, progress):
             for artifact in task["expected_artifacts"]:
                 st.write(f"- `{artifact}`")
 
+        if task.get("small_hint"):
+            st.info(task["small_hint"])
+
+        if task.get("full_explanation"):
+            with st.expander("Full explanation"):
+                st.write(task["full_explanation"])
+
+        if task.get("bonus"):
+            st.success(f"Bonus: {task['bonus']}")
+
         if task_state.get("builder_notes"):
             st.write("Builder notes")
             st.info(task_state["builder_notes"])
@@ -206,16 +241,9 @@ def render_task(task, progress):
 def render_milestone(milestone, progress):
     state = milestone_status(milestone, progress)
     st.header(f"{status_icon(state)} {milestone['title']}")
-    st.write(milestone["description"])
+    st.write(milestone.get("long_description", milestone.get("description", "")))
 
-    if st.button("Restart milestone", key=f"restart-{milestone['id']}"):
-        reset_milestone(milestone, progress)
-        st.rerun()
-
-    prompt = milestone_prompt(challenge, milestone)
-    copy_button(prompt, milestone["id"])
-    with st.expander("Prompt to paste into coding agent"):
-        st.code(prompt, language="text")
+    render_prompt_reveal(challenge, milestone)
 
     st.subheader("Tasks")
     for task in milestone["tasks"]:
@@ -229,6 +257,11 @@ def render_milestone(milestone, progress):
         with st.expander(artifact, expanded=False):
             render_artifact_preview(artifact)
 
+    st.divider()
+    if st.button("Restart milestone", key=f"restart-{milestone['id']}"):
+        reset_milestone(milestone, progress)
+        st.rerun()
+
 
 challenge = load_json(CHALLENGE_PATH)
 progress = load_json(PROGRESS_PATH)
@@ -239,6 +272,11 @@ st.caption(challenge["goal"])
 
 total_tasks = sum(len(milestone["tasks"]) for milestone in challenge["milestones"])
 complete_tasks = sum(1 for task in progress["tasks"].values() if task.get("status") == "complete")
+
+render_introduction(challenge, progress)
+
+st.divider()
+st.header("Workspace")
 st.progress(complete_tasks / total_tasks if total_tasks else 0)
 st.write(f"{complete_tasks} of {total_tasks} tasks complete")
 

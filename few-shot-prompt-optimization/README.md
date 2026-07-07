@@ -43,6 +43,7 @@ python scripts/mark_ready.py --milestone eda --notes "Completed user_artifacts/e
 
 For the baseline milestone, create:
 
+- `user_artifacts/prompts/baseline_prompt.txt`
 - `user_artifacts/src/baseline.py`
 - `user_artifacts/src/metrics.py`
 - `user_artifacts/baseline_results.json`

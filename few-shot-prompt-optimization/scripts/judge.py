@@ -119,7 +119,29 @@ def judge_baseline_task(task):
     evidence = []
     missing_or_risky = []
 
-    if task_id == "baseline_classifier":
+    if task_id == "baseline_prompt":
+        path = USER_ARTIFACTS_DIR / "prompts" / "baseline_prompt.txt"
+        text = read_text(path) if path.exists() else ""
+        lower = text.lower()
+        mentions_message = "message" in lower or "utterance" in lower or "{text}" in lower
+        mentions_label = "label" in lower or "intent" in lower or "{labels}" in lower
+        instructs_single = "return only" in lower or "exactly one" in lower or "single" in lower
+        evidence.extend([
+            f"prompt length={len(text)}",
+            f"mentions message={mentions_message}",
+            f"mentions label/intent={mentions_label}"
+        ])
+        if not text.strip():
+            missing_or_risky.append("baseline_prompt.txt should not be empty.")
+        if not mentions_message:
+            missing_or_risky.append("Prompt should include or reference the ATIS message text.")
+        if not mentions_label:
+            missing_or_risky.append("Prompt should ask for an intent label/class.")
+        if not instructs_single:
+            missing_or_risky.append("Prompt should constrain the model to one label or a minimal output.")
+        return ("pass" if not missing_or_risky else "needs_revision"), evidence, missing_or_risky
+
+    if task_id == "single_message_classifier":
         path = USER_ARTIFACTS_DIR / "src" / "baseline.py"
         ok, message = compile_python_artifact(path)
         evidence.append(message)
