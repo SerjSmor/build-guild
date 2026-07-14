@@ -1,0 +1,9 @@
+{
+  "seed": 42,
+  "train_size": 100,
+  "validation_size": 50,
+  "test_size": 50,
+  "input_field": "text",
+  "label_field": "intent",
+  "test_used_during_optimization": false
+}

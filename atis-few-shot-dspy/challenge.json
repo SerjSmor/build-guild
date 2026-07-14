@@ -1,0 +1,173 @@
+{
+  "id": "atis-few-shot-dspy",
+  "title": "ATIS Few-Shot Optimization with DSPy",
+  "goal": "Optimize an ATIS intent classifier with DSPy, then export its behavior to provider-native OpenAI code for production.",
+  "introduction": {
+    "title": "Turn a DSPy Experiment into Production Code",
+    "body": [
+      "Start with a small service that turns one travel message into one ATIS intent label.",
+      "Rebuild and optimize that same behavior with DSPy while keeping evaluation reproducible.",
+      "Export the best compiled behavior back into the original service interface and verify that it stays aligned."
+    ],
+    "illustration": "assets/full-flow-illustration.png",
+    "checkpoint_title": "Prompt Optimization Reminder",
+    "checkpoint_description": "Use these questions as a quick discussion checkpoint. They reactivate concepts from the previous session and are not a judged milestone.",
+    "questions": [
+      {"question": "Which data should determine final reported performance?", "options": ["A. Training data", "B. Validation data used for selection", "C. A held-out test set"]},
+      {"question": "Where should an optimizer compare candidate programs?", "options": ["A. Validation data", "B. Final test data", "C. Only training data"]},
+      {"question": "What makes a small sampled experiment reproducible?", "options": ["A. Only final accuracy", "B. Split sizes, sampling method, and seed", "C. The run time"]},
+      {"question": "Which action creates test leakage?", "options": ["A. Using test labels to choose a prompt", "B. Defining known label names", "C. Reporting test metrics after optimization"]}
+    ]
+  },
+  "dataset": {
+    "name": "ATIS",
+    "huggingface_id": "tuetschek/atis",
+    "url": "https://huggingface.co/datasets/tuetschek/atis?library=true",
+    "loading_example": "from datasets import load_dataset\n\ndataset = load_dataset(\"tuetschek/atis\")\nprint(dataset[\"train\"][0])",
+    "notes": [
+      "Use text as the utterance and intent as the target label.",
+      "Choose and document fixed split sizes and a random seed so the experiment can be reproduced.",
+      "Keep the final test set out of optimizer selection and compilation."
+    ]
+  },
+  "judging": {
+    "mode": "dynamic",
+    "default_level": "medium",
+    "levels": {
+      "easy": "Plausibility and artifact check.",
+      "medium": "Implementation review plus available commands.",
+      "hard": "Strict behavioral review with deeper checks for leakage, export correctness, and superficial implementations."
+    }
+  },
+  "milestones": [
+    {
+      "id": "classification_service",
+      "title": "Create an ATIS Classification Service",
+      "short_description": "Build the simple message-to-intent behavior that DSPy will later optimize.",
+      "long_description": "- Build `classify(message: str) -> str`.\n- Return one normalized ATIS intent.\n- Reuse useful ideas from the previous quest, but keep this quest self-contained.\n- Keep the interface stable for later milestones.",
+      "tasks": [
+        {
+          "id": "review_previous_quest",
+          "title": "Decide what to reuse from the previous prompt-optimization quest",
+          "small_hint": "Look for small reusable pieces such as dataset loading, label normalization, metrics, or evaluation helpers.",
+          "full_explanation": "Inspect few-shot-prompt-optimization and briefly document what you will reuse, adapt, or rebuild. Avoid runtime imports from the previous challenge: copy and improve only the pieces that make this quest clearer, and keep the new challenge self-contained.",
+          "judge_level": "easy",
+          "expected_artifacts": ["user_artifacts/reuse_notes.md"]
+        },
+        {
+          "id": "create_classification_service",
+          "title": "Create a function that classifies one ATIS message",
+          "small_hint": "Start with the interface: given one message, what should the caller receive?",
+          "full_explanation": "Implement classify(message: str) -> str in user_artifacts/src/service.py using an LLM provider of your choice. It should return one normalized ATIS intent label and hide provider-specific request details from its caller. Use a basic prompt for now. You will preserve this exact interface while replacing its internals with the DSPy-optimized behavior later.",
+          "judge_level": "medium",
+          "expected_artifacts": ["user_artifacts/src/service.py"]
+        },
+        {
+          "id": "smoke_test_service",
+          "title": "Show that the service classifies a few messages",
+          "small_hint": "Use a few ATIS messages and retain the returned labels so the behavior is visible.",
+          "full_explanation": "Call classify on a small set of ATIS utterances and save the inputs and predictions. This is a smoke test, not yet the formal held-out evaluation. Its purpose is to make the product behavior concrete before introducing DSPy.",
+          "judge_level": "medium",
+          "expected_artifacts": ["user_artifacts/service_smoke_test.json"]
+        }
+      ]
+    },
+    {
+      "id": "dspy_few_shot",
+      "title": "DSPy Few-Shot Example",
+      "short_description": "Choose a DSPy optimizer, compile a few-shot classifier, and evaluate it.",
+      "long_description": "- Rebuild the classifier as a DSPy program.\n- Prepare reproducible train and test examples.\n- Research and choose an optimizer.\n- Compile, save, and inspect the best program.\n- Evaluate it on held-out data.",
+      "tasks": [
+        {
+          "id": "create_dspy_splits",
+          "title": "Prepare reproducible data for a DSPy optimization experiment",
+          "small_hint": "DSPy optimizers work with dspy.Example objects. Decide which field is input and which is the expected output.",
+          "full_explanation": "Convert ATIS rows into dspy.Example objects and mark the utterance field as input. Choose practical fixed sizes and a seed, document them, and preserve a held-out test set. You may add a validation set if your optimizer needs one.",
+          "judge_level": "hard",
+          "expected_artifacts": ["user_artifacts/src/prepare_dspy_data.py", "user_artifacts/split_manifest.json"]
+        },
+        {
+          "id": "research_dspy_optimizers",
+          "title": "Understand the available optimization approaches",
+          "small_hint": "Inspect the DSPy version you are actually using and compare optimizers by requirements, cost, and output.",
+          "full_explanation": "Document several relevant DSPy optimizers, what each one optimizes, and their practical tradeoffs. Cite the documentation or installed API you inspected, then explain which candidates fit this classification task.",
+          "judge_level": "medium",
+          "expected_artifacts": ["user_artifacts/optimizer_research.md"]
+        },
+        {
+          "id": "compile_dspy_program",
+          "title": "Build and compile the DSPy classifier",
+          "small_hint": "The choice matters less than a sound reason and a real compilation run.",
+          "full_explanation": "Define an ATIS DSPy signature/module and metric, configure your chosen optimizer, and compile the program with training data. Keep configuration and execution reproducible and record the optimizer, model, seed, and relevant parameters.",
+          "judge_level": "hard",
+          "expected_artifacts": ["user_artifacts/src/optimize.py", "user_artifacts/optimization_run.json"]
+        },
+        {
+          "id": "save_best_program",
+          "title": "Inspect and save what DSPy produced",
+          "small_hint": "Save enough state to inspect and reload what compilation produced.",
+          "full_explanation": "Persist the selected compiled DSPy program using an appropriate DSPy save mechanism. Also export a human-readable summary of its instructions, demonstrations, signature, and output expectations for the production milestone.",
+          "judge_level": "hard",
+          "expected_artifacts": ["user_artifacts/compiled_program.json", "user_artifacts/compiled_program_summary.md"]
+        },
+        {
+          "id": "evaluate_dspy_test_set",
+          "title": "Evaluate the optimized behavior honestly",
+          "small_hint": "Use the untouched test examples and retain per-example predictions, not only one score.",
+          "full_explanation": "Run the saved best program on the held-out test set. Record sample size, accuracy, and rows containing text, gold intent, and predicted intent. Keep this exact sample available for the later alignment test.",
+          "judge_level": "hard",
+          "expected_artifacts": ["user_artifacts/dspy_test_results.json"]
+        },
+        {
+          "id": "add_mlflow",
+          "title": "Add MLflow experiment tracking",
+          "small_hint": "Track configuration, metrics, and useful run artifacts.",
+          "full_explanation": "Optionally log optimizer configuration, model settings, evaluation metrics, and the compiled-program artifacts to MLflow.",
+          "judge_level": "medium",
+          "optional": true,
+          "expected_artifacts": ["user_artifacts/mlflow_notes.md"]
+        }
+      ]
+    },
+    {
+      "id": "dspy_instruction_optimization",
+      "title": "DSPy Instruction-Based Example",
+      "short_description": "Reserved for an optional instruction-optimization extension.",
+      "long_description": "- Optional extension.\n- Reserved for a future instruction-optimization exercise.",
+      "optional": true,
+      "tasks": []
+    },
+    {
+      "id": "towards_production",
+      "title": "Towards Production",
+      "short_description": "Export the compiled DSPy behavior to direct OpenAI code and verify alignment.",
+      "long_description": "- Export the compiled DSPy behavior to direct OpenAI code.\n- Preserve `classify(message: str) -> str`.\n- Do not require DSPy in the production service.\n- Reach at least 90% alignment on the same held-out examples.",
+      "tasks": [
+        {
+          "id": "plan_dspy_export",
+          "title": "Determine how to reproduce the best DSPy program with the same OpenAI service interface",
+          "small_hint": "Inspect what DSPy compiled: instructions, demonstrations, input/output fields, and parsing behavior.",
+          "full_explanation": "Write a concise export plan mapping the compiled DSPy program into provider-native OpenAI request components while preserving the service.py function signature.",
+          "judge_level": "medium",
+          "expected_artifacts": ["user_artifacts/export_plan.md"]
+        },
+        {
+          "id": "export_to_openai",
+          "title": "Export the best DSPy prompt to OpenAI code without a DSPy production dependency",
+          "small_hint": "The exported code should contain the compiled behavior, not merely call the original DSPy module.",
+          "full_explanation": "Ask your coding agent to replace the service implementation with direct OpenAI code derived from the saved DSPy instructions and demonstrations. Preserve the original function signature and ensure the production path neither imports nor invokes DSPy.",
+          "judge_level": "hard",
+          "expected_artifacts": ["user_artifacts/src/service.py", "user_artifacts/src/service_dspy_reference.py"]
+        },
+        {
+          "id": "test_export_alignment",
+          "title": "Test at least 90% alignment on the test set",
+          "small_hint": "Compare normalized predictions from both implementations on the exact same examples.",
+          "full_explanation": "Run the DSPy reference and exported OpenAI service on the same held-out sample. Save each pair of predictions, agreement, both accuracies, and overall alignment. Alignment must be at least 0.90; reporting both accuracies prevents agreement on the same mistakes from being mistaken for quality.",
+          "judge_level": "hard",
+          "expected_artifacts": ["user_artifacts/alignment_results.json"]
+        }
+      ]
+    }
+  ]
+}

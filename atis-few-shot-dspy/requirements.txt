@@ -1,0 +1,4 @@
+streamlit>=1.36
+datasets>=2.19
+dspy>=2.6
+openai>=1.0

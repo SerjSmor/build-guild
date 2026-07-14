@@ -1,0 +1,15 @@
+{
+  "sample_size": 50,
+  "alignment": 0.9,
+  "dspy_accuracy": 0.8,
+  "openai_accuracy": 0.78,
+  "predictions": [
+    {
+      "text": "example utterance",
+      "gold_intent": "intent_name",
+      "dspy_prediction": "intent_name",
+      "openai_prediction": "intent_name",
+      "agrees": true
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "challenge_id": "atis-few-shot-dspy",
+  "tasks": {
+    "review_previous_quest": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "create_classification_service": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "smoke_test_service": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "create_dspy_splits": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "research_dspy_optimizers": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "compile_dspy_program": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "save_best_program": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "evaluate_dspy_test_set": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "add_mlflow": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "plan_dspy_export": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "export_to_openai": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    },
+    "test_export_alignment": {
+      "status": "pending",
+      "builder_notes": "",
+      "judge": null
+    }
+  }
+}
